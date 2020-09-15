@@ -266,7 +266,7 @@ class Board(object):
         """DEPRECATED - use Board.to_string()"""
         return self.to_string()
 
-    def to_string(self, symbols=['1', '2']):
+    def to_string(self, symbols=['1️⃣', '2️⃣']):
         """Generate a string representation of the current game state, marking
         the location of each player and indicating which cells have been
         blocked, and which remain open.
