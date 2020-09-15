@@ -240,8 +240,14 @@ class HumanPlayer():
         valid_choice = False
         while not valid_choice:
             try:
-                index = int(input('Select move index:'))
-                valid_choice = 0 <= index < len(legal_moves)
+                _input = tuple(map(int, input('Select move index:').split()))
+                if len(_input) == 1:
+                    index = _input[0]
+                    valid_choice = 0 <= index < len(legal_moves)
+                else:
+                    x, y = _input
+                    index = legal_moves.index((x, y))
+                    valid_choice = True
 
                 if not valid_choice:
                     print('Illegal move! Try again.')
