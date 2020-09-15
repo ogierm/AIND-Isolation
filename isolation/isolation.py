@@ -276,21 +276,20 @@ class Board(object):
 
         col_margin = len(str(self.height - 1)) + 1
         prefix = "{:<" + "{}".format(col_margin) + "}"
-        offset = " " * (col_margin + 3)
-        out = offset + '   '.join(map(str, range(self.width))) + '\n\r'
+        offset = " " * col_margin
+        out = offset + ' '.join(map(str, range(self.width))) + '\n\r'
         for i in range(self.height):
-            out += prefix.format(i) + ' | '
+            out += prefix.format(i)
             for j in range(self.width):
                 idx = i + j * self.height
                 if not self._board_state[idx]:
-                    out += ' '
+                    out += '⬜'
                 elif p1_loc == idx:
-                    out += symbols[0]
+                    out += symbols[0] + ' '
                 elif p2_loc == idx:
-                    out += symbols[1]
+                    out += symbols[1] + ' '
                 else:
-                    out += '-'
-                out += ' | '
+                    out += '⬛'
             out += '\n\r'
 
         return out
