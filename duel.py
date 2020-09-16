@@ -1,5 +1,5 @@
 from isolation import Board
-from sample_players import HumanPlayer, RandomPlayer, GreedyPlayer
+from sample_players import RandomPlayer, HumanPlayer, GreedyPlayer
 
 player1 = RandomPlayer()
 player2 = HumanPlayer()

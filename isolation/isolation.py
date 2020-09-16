@@ -7,9 +7,11 @@ You MAY use and modify this class, however ALL function signatures must
 remain compatible with the defaults provided, and none of your changes will
 be available to project reviewers.
 """
+from __future__ import annotations
 import random
 import timeit
 from copy import copy
+from typing import List, Tuple, Optional
 
 TIME_LIMIT_MILLIS = 150
 
@@ -48,7 +50,7 @@ class Board(object):
 
         # The last 3 entries of the board state includes initiative (0 for
         # player 1, 1 for player 2) player 2 last move, and player 1 last move
-        self._board_state = [Board.BLANK] * (width * height + 3)
+        self._board_state: List[Optional[int]] = [Board.BLANK] * (width * height + 3)
         self._board_state[-1] = Board.NOT_MOVED
         self._board_state[-2] = Board.NOT_MOVED
 
@@ -118,7 +120,7 @@ class Board(object):
         new_board.apply_move(move)
         return new_board
 
-    def move_is_legal(self, move):
+    def move_is_legal(self, move) -> bool:
         """Test whether a move is legal in the current game state.
 
         Parameters
@@ -136,13 +138,13 @@ class Board(object):
         return (0 <= move[0] < self.height and 0 <= move[1] < self.width and
                 self._board_state[idx] == Board.BLANK)
 
-    def get_blank_spaces(self):
+    def get_blank_spaces(self) -> List[Tuple[int, int]]:
         """Return a list of the locations that are still available on the board.
         """
         return [(i, j) for j in range(self.width) for i in range(self.height)
                 if self._board_state[i + j * self.height] == Board.BLANK]
 
-    def get_player_location(self, player):
+    def get_player_location(self, player) -> Optional[Tuple[int, int]]:
         """Find the current location of the specified player on the board.
 
         Parameters
@@ -171,7 +173,7 @@ class Board(object):
         h = idx % self.height
         return (h, w)
 
-    def get_legal_moves(self, player=None):
+    def get_legal_moves(self, player=None) -> List[Tuple[int, int]]:
         """Return the list of all legal moves for the specified player.
 
         Parameters
@@ -190,7 +192,7 @@ class Board(object):
             player = self.active_player
         return self.__get_moves(self.get_player_location(player))
 
-    def apply_move(self, move):
+    def apply_move(self, move: Tuple[int, int]):
         """Move the active player to a specified location.
 
         Parameters
@@ -207,15 +209,15 @@ class Board(object):
         self._active_player, self._inactive_player = self._inactive_player, self._active_player
         self.move_count += 1
 
-    def is_winner(self, player):
+    def is_winner(self, player) -> bool:
         """ Test whether the specified player has won the game. """
         return player == self._inactive_player and not self.get_legal_moves(self._active_player)
 
-    def is_loser(self, player):
+    def is_loser(self, player) -> bool:
         """ Test whether the specified player has lost the game. """
         return player == self._active_player and not self.get_legal_moves(self._active_player)
 
-    def utility(self, player):
+    def utility(self, player) -> float:
         """Returns the utility of the current game state from the perspective
         of the specified player.
 
@@ -247,7 +249,7 @@ class Board(object):
 
         return 0.
 
-    def __get_moves(self, loc):
+    def __get_moves(self, loc) -> List[Tuple[int, int]]:
         """Generate the list of possible moves for an L-shaped motion (like a
         knight in chess).
         """
@@ -266,7 +268,7 @@ class Board(object):
         """DEPRECATED - use Board.to_string()"""
         return self.to_string()
 
-    def to_string(self, symbols=['1️⃣', '2️⃣']):
+    def to_string(self, symbols=['1️⃣', '2️⃣']) -> str:
         """Generate a string representation of the current game state, marking
         the location of each player and indicating which cells have been
         blocked, and which remain open.

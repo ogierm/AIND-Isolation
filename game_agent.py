@@ -2,7 +2,10 @@
 test your agent's strength against a set of known agents using tournament.py
 and include the results in your report.
 """
+from __future__ import annotations
 import random
+from isolation import Board
+from typing import Tuple
 
 
 class SearchTimeout(Exception):
@@ -10,7 +13,7 @@ class SearchTimeout(Exception):
     pass
 
 
-def custom_score(game, player):
+def custom_score(game: Board, player: IsolationPlayer) -> float:
     """Calculate the heuristic value of a game state from the point of view
     of the given player.
 
@@ -38,7 +41,7 @@ def custom_score(game, player):
     raise NotImplementedError
 
 
-def custom_score_2(game, player):
+def custom_score_2(game: Board, player: IsolationPlayer) -> float:
     """Calculate the heuristic value of a game state from the point of view
     of the given player.
 
@@ -64,7 +67,7 @@ def custom_score_2(game, player):
     raise NotImplementedError
 
 
-def custom_score_3(game, player):
+def custom_score_3(game: Board, player: IsolationPlayer) -> float:
     """Calculate the heuristic value of a game state from the point of view
     of the given player.
 
@@ -88,7 +91,6 @@ def custom_score_3(game, player):
     """
     # TODO: finish this function!
     raise NotImplementedError
-
 
 class IsolationPlayer:
     """Base class for minimax and alphabeta agents -- this class is never
@@ -118,6 +120,9 @@ class IsolationPlayer:
         self.time_left = None
         self.TIMER_THRESHOLD = timeout
 
+    def get_move(self, game: Board, time_left) -> Tuple[int, int]:
+        raise NotImplementedError
+
 
 class MinimaxPlayer(IsolationPlayer):
     """Game-playing agent that chooses a move using depth-limited minimax
@@ -125,7 +130,7 @@ class MinimaxPlayer(IsolationPlayer):
     minimax to return a good move before the search time limit expires.
     """
 
-    def get_move(self, game, time_left):
+    def get_move(self, game: Board, time_left) -> Tuple[int, int]:
         """Search for the best move from the available legal moves and return a
         result before the time limit expires.
 
@@ -170,7 +175,7 @@ class MinimaxPlayer(IsolationPlayer):
         # Return the best move from the last completed search iteration
         return best_move
 
-    def minimax(self, game, depth):
+    def minimax(self, game: Board, depth: int) -> Tuple[int, int]:
         """Implement depth-limited minimax search algorithm as described in
         the lectures.
 
@@ -222,7 +227,7 @@ class AlphaBetaPlayer(IsolationPlayer):
     make sure it returns a good move before the search time limit expires.
     """
 
-    def get_move(self, game, time_left):
+    def get_move(self, game: Board, time_left) -> Tuple[int, int]:
         """Search for the best move from the available legal moves and return a
         result before the time limit expires.
 
@@ -257,7 +262,7 @@ class AlphaBetaPlayer(IsolationPlayer):
         # TODO: finish this function!
         raise NotImplementedError
 
-    def alphabeta(self, game, depth, alpha=float("-inf"), beta=float("inf")):
+    def alphabeta(self, game: Board, depth: int, alpha=float("-inf"), beta=float("inf")) -> Tuple[int, int]:
         """Implement depth-limited minimax search with alpha-beta pruning as
         described in the lectures.
 

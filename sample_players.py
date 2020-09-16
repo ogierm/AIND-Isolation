@@ -7,9 +7,11 @@ own agent and example heuristic functions.
 """
 
 from random import randint
+from game_agent import IsolationPlayer as Player
+from typing import Tuple
+from isolation import Board
 
-
-def null_score(game, player):
+def null_score(game: Board, player: Player) -> float:
     """This heuristic presumes no knowledge for non-terminal states, and
     returns the same uninformative value for all other states.
 
@@ -39,7 +41,7 @@ def null_score(game, player):
     return 0.
 
 
-def open_move_score(game, player):
+def open_move_score(game: Board, player: Player) -> float:
     """The basic evaluation function described in lecture that outputs a score
     equal to the number of moves open for your computer player on the board.
 
@@ -68,7 +70,7 @@ def open_move_score(game, player):
     return float(len(game.get_legal_moves(player)))
 
 
-def improved_score(game, player):
+def improved_score(game: Board, player: Player):
     """The "Improved" evaluation function discussed in lecture that outputs a
     score equal to the difference in the number of moves available to the
     two players.
@@ -100,7 +102,7 @@ def improved_score(game, player):
     return float(own_moves - opp_moves)
 
 
-def center_score(game, player):
+def center_score(game: Board, player: Player) -> float:
     """Outputs a score equal to square of the distance from the center of the
     board to the position of the player.
 
@@ -133,10 +135,10 @@ def center_score(game, player):
     return float((h - y)**2 + (w - x)**2)
 
 
-class RandomPlayer():
+class RandomPlayer(Player):
     """Player that chooses a move randomly."""
 
-    def get_move(self, game, time_left):
+    def get_move(self, game: Board, time_left) -> Tuple[int, int]:
         """Randomly select a move from the available legal moves.
 
         Parameters
@@ -162,7 +164,7 @@ class RandomPlayer():
         return legal_moves[randint(0, len(legal_moves) - 1)]
 
 
-class GreedyPlayer():
+class GreedyPlayer(Player):
     """Player that chooses next move to maximize heuristic score. This is
     equivalent to a minimax search agent with a search depth of one.
     """
@@ -170,7 +172,7 @@ class GreedyPlayer():
     def __init__(self, score_fn=open_move_score):
         self.score = score_fn
 
-    def get_move(self, game, time_left):
+    def get_move(self, game: Board, time_left) -> Tuple[int, int]:
         """Select the move from the available legal moves with the highest
         heuristic score.
 
@@ -199,10 +201,10 @@ class GreedyPlayer():
         return move
 
 
-class HumanPlayer():
+class HumanPlayer(Player):
     """Player that chooses a move according to user's input."""
 
-    def get_move(self, game, time_left):
+    def get_move(self, game: Board, time_left) -> Tuple[int, int]:
         """
         Select a move from the available legal moves based on user input at the
         terminal.
