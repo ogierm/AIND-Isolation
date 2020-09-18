@@ -11,7 +11,7 @@ from __future__ import annotations
 import random
 import timeit
 from copy import copy
-from typing import List, Tuple, Optional
+from typing import List, Tuple, Optional, Any
 
 TIME_LIMIT_MILLIS = 150
 
@@ -296,7 +296,7 @@ class Board(object):
 
         return out
 
-    def play(self, time_limit=TIME_LIMIT_MILLIS):
+    def play(self, time_limit=TIME_LIMIT_MILLIS) -> Tuple[Any, List[Tuple[int, int]], str]:
         """Execute a match between the players by alternately soliciting them
         to select a move and applying it in the game.
 
@@ -313,7 +313,7 @@ class Board(object):
             move history, and a string indicating the reason for losing
             (e.g., timeout or invalid move).
         """
-        move_history = []
+        move_history: List[Tuple[int, int]] = []
 
         time_millis = lambda: 1000 * timeit.default_timer()
 
@@ -324,7 +324,7 @@ class Board(object):
 
             move_start = time_millis()
             time_left = lambda : time_limit - (time_millis() - move_start)
-            curr_move = self._active_player.get_move(game_copy, time_left)
+            curr_move: Tuple[int, int] = self._active_player.get_move(game_copy, time_left)
             move_end = time_left()
 
             if curr_move is None:
