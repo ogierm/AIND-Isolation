@@ -1,13 +1,14 @@
 from isolation import Board
-from sample_players import RandomPlayer, HumanPlayer, GreedyPlayer
+from sample_players import RandomPlayer, HumanPlayer, GreedyPlayer, open_move_score, center_score, improved_score, null_score
+from game_agent import MinimaxPlayer, AlphaBetaPlayer
 
-player1 = RandomPlayer()
-player2 = HumanPlayer()
+player1 = GreedyPlayer()
+player2 = MinimaxPlayer(search_depth=4, score_fn=improved_score)
 
 game = Board(player1, player2)
 
-winner, history, outcome = game.play(time_limit=99999999)
+winner, history, outcome = game.play(time_limit=9999999)
 
-print("\nWinner: {}\nOutcome: {}".format(winner, outcome))
+print("\nWinner: {}\nOutcome: {}".format("Player 1" if winner == player1 else "Player 2", outcome))
 print(game.to_string())
 print("Move history:\n{!s}".format(history))
