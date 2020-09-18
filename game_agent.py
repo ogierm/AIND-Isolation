@@ -15,7 +15,7 @@ class SearchTimeout(Exception):
 
 def custom_score(game: Board, player: IsolationPlayer) -> float:
     """Calculate the heuristic value of a game state from the point of view
-    of the given player.
+    of the given player. (Negamax!)
 
     This should be the best heuristic function for your project submission.
 
@@ -37,8 +37,7 @@ def custom_score(game: Board, player: IsolationPlayer) -> float:
     float
         The heuristic value of the current game state to the specified player.
     """
-    # TODO: finish this function!
-    raise NotImplementedError
+    return game.utility(player)
 
 
 def custom_score_2(game: Board, player: IsolationPlayer) -> float:
@@ -217,9 +216,17 @@ class MinimaxPlayer(IsolationPlayer):
         if self.time_left() < self.TIMER_THRESHOLD:
             raise SearchTimeout()
 
-        # TODO: finish this function!
-        raise NotImplementedError
+        def negamax(board: Board, depth: int):
+            if self.time_left() < self.TIMER_THRESHOLD:
+                raise SearchTimeout()
 
+            if depth == 0 or board.is_winner(self) or board.is_loser(self):
+                return self.score(board, board.active_player)
+
+            return -min(negamax(board.forecast_move(move), depth -1) for move in board.get_legal_moves())
+
+        second = lambda tup: tup[1]
+        return min(((move, negamax(game.forecast_move(move), depth -1)) for move in game.get_legal_moves()), key=second)[0]
 
 class AlphaBetaPlayer(IsolationPlayer):
     """Game-playing agent that chooses a move using iterative deepening minimax
