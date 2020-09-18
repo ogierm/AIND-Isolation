@@ -226,7 +226,7 @@ class MinimaxPlayer(IsolationPlayer):
             return -min(negamax(board.forecast_move(move), depth -1) for move in board.get_legal_moves())
 
         second = lambda tup: tup[1]
-        return min(((move, negamax(game.forecast_move(move), depth -1)) for move in game.get_legal_moves()), key=second)[0]
+        return min(((move, negamax(game.forecast_move(move), depth -1)) for move in game.get_legal_moves()), key=second, default=((-1, -1), None))[0]
 
 class AlphaBetaPlayer(IsolationPlayer):
     """Game-playing agent that chooses a move using iterative deepening minimax
