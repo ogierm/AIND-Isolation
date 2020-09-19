@@ -166,7 +166,7 @@ class MinimaxPlayer(IsolationPlayer):
         try:
             # The try/except block will automatically catch the exception
             # raised when the timer is about to expire.
-            return self.minimax(game, self.search_depth)
+            return self.minimax(game, self.search_depth)[0]
 
         except SearchTimeout:
             pass  # Handle any actions required after timeout as needed
@@ -174,7 +174,7 @@ class MinimaxPlayer(IsolationPlayer):
         # Return the best move from the last completed search iteration
         return best_move
 
-    def minimax(self, game: Board, depth: int) -> Tuple[int, int]:
+    def minimax(self, game: Board, depth: int) -> Tuple[Tuple[int, int], float]:
         """Implement depth-limited minimax search algorithm as described in
         the lectures.
 
@@ -216,22 +216,12 @@ class MinimaxPlayer(IsolationPlayer):
         if self.time_left() < self.TIMER_THRESHOLD:
             raise SearchTimeout()
 
-        def negamax(board: Board, depth: int):
-            if self.time_left() < self.TIMER_THRESHOLD:
-                raise SearchTimeout()
-
-            moves = game.get_legal_moves()
-            if depth == 0 or len(moves) == 0:
-                return self.score(board, board.active_player)
-
-            return -min(negamax(board.forecast_move(move), depth -1) for move in moves)
-
         moves = game.get_legal_moves()
         if depth == 0 or len(moves) == 0:
-            return -1, -1
+            return (-1, -1), self.score(game, game.active_player)
 
         second = lambda tup: tup[1]
-        return min(((move, negamax(game.forecast_move(move), depth -1)) for move in moves), key=second)[0]
+        return max(((move, -self.minimax(game.forecast_move(move), depth -1)[1]) for move in moves), key=second)
 
 class AlphaBetaPlayer(IsolationPlayer):
     """Game-playing agent that chooses a move using iterative deepening minimax
