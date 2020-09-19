@@ -220,13 +220,18 @@ class MinimaxPlayer(IsolationPlayer):
             if self.time_left() < self.TIMER_THRESHOLD:
                 raise SearchTimeout()
 
-            if depth == 0 or board.is_winner(self) or board.is_loser(self):
+            moves = game.get_legal_moves()
+            if depth == 0 or len(moves) == 0:
                 return self.score(board, board.active_player)
 
-            return -min(negamax(board.forecast_move(move), depth -1) for move in board.get_legal_moves())
+            return -min(negamax(board.forecast_move(move), depth -1) for move in moves)
+
+        moves = game.get_legal_moves()
+        if depth == 0 or len(moves) == 0:
+            return -1, -1
 
         second = lambda tup: tup[1]
-        return min(((move, negamax(game.forecast_move(move), depth -1)) for move in game.get_legal_moves()), key=second, default=((-1, -1), None))[0]
+        return min(((move, negamax(game.forecast_move(move), depth -1)) for move in moves), key=second)[0]
 
 class AlphaBetaPlayer(IsolationPlayer):
     """Game-playing agent that chooses a move using iterative deepening minimax
