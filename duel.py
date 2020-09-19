@@ -2,8 +2,8 @@ from isolation import Board
 from sample_players import RandomPlayer, HumanPlayer, GreedyPlayer, open_move_score, center_score, improved_score, null_score
 from game_agent import MinimaxPlayer, AlphaBetaPlayer
 
-player1 = GreedyPlayer()
-player2 = MinimaxPlayer(search_depth=4, score_fn=improved_score)
+player1 = MinimaxPlayer(search_depth=2, score_fn=improved_score)
+player2 = AlphaBetaPlayer(search_depth=3, score_fn=improved_score)
 
 game = Board(player1, player2)
 
