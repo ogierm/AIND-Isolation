@@ -39,7 +39,7 @@ def custom_score(game: Board, player: IsolationPlayer) -> float:
     """
     if game.is_winner(player): return float("inf")
     if game.is_loser(player): return float("-inf")
-    return len(game.get_legal_moves(player)) - len(game.get_legal_moves(game.get_opponent(player))) * 3
+    return len(game.get_legal_moves(player)) - len(game.get_legal_moves(game.get_opponent(player)))
 
 
 def custom_score_2(game: Board, player: IsolationPlayer) -> float:
