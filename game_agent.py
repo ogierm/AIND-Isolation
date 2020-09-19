@@ -325,7 +325,7 @@ class AlphaBetaPlayer(IsolationPlayer):
 
         for move in moves:
             next_game = game.forecast_move(move)
-            score = -self.alphabeta(next_game, depth -1, -beta, -best_score[1])[1]
+            score = -self.alphabeta(next_game, depth -1, -beta, -best_score)[1]
 
             if best_score < score: # Wir suchen ja nach dem Zug mit der besten Bewertung
                 best_move, best_score = move, score
