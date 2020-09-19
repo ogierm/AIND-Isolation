@@ -115,11 +115,12 @@ class IsolationPlayer:
         positive value large enough to allow the function to return before the
         timer expires.
     """
-    def __init__(self, search_depth=3, score_fn=custom_score, timeout=10.):
+    def __init__(self, search_depth=3, score_fn=custom_score, timeout=10., limit_depth=False):
         self.search_depth = search_depth
         self.score = score_fn
         self.time_left = None
         self.TIMER_THRESHOLD = timeout
+        self.LIMIT_DEPTH = limit_depth
 
     def get_move(self, game: Board, time_left) -> Tuple[int, int]:
         raise NotImplementedError
@@ -263,6 +264,20 @@ class AlphaBetaPlayer(IsolationPlayer):
         """
         self.time_left = time_left
 
+        best_move = -1, -1
+        best_score = float("-inf")
+        depth = 0
+
+        try:
+            while self.time_left() > self.TIMER_THRESHOLD:
+                best_move = self.alphabeta(game, depth)[0]
+                depth += 1
+                if self.LIMIT_DEPTH and depth > self.search_depth: break
+        except SearchTimeout:
+            pass
+
+        return best_move
+
         return self.alphabeta(game, self.search_depth)[0]
 
     def alphabeta(self, game: Board, depth: int, alpha=float("-inf"), beta=float("inf")) -> Tuple[Tuple[int, int], float]:
@@ -318,6 +333,8 @@ class AlphaBetaPlayer(IsolationPlayer):
         moves = game.get_legal_moves()
         if depth == 0 or len(moves) == 0:
             return (-1, -1), self.score(game, game.active_player)
+
+        moves.sort(reverse=True, key=lambda move: self.score(game.forecast_move(move), game.active_player))
 
         for move in moves:
             next_game = game.forecast_move(move)
