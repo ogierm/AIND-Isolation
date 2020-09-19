@@ -317,7 +317,7 @@ class AlphaBetaPlayer(IsolationPlayer):
         if self.time_left() < self.TIMER_THRESHOLD:
             raise SearchTimeout()
 
-        maximum = (-1, -1), alpha # Bestmöglicher Zug & bestmögliche Bewertung
+        best_move, best_score = (-1, -1), alpha # Bestmöglicher Zug & bestmögliche Bewertung
 
         moves = game.get_legal_moves()
         if depth == 0 or len(moves) == 0:
@@ -325,9 +325,9 @@ class AlphaBetaPlayer(IsolationPlayer):
 
         for move in moves:
             next_game = game.forecast_move(move)
-            value = -self.alphabeta(next_game, depth -1, -beta, -maximum[1])[1]
+            score = -self.alphabeta(next_game, depth -1, -beta, -best_score[1])[1]
 
-            if maximum[1] < value:
-                maximum = move, value
-                if maximum[1] >= beta: break
-        return maximum
+            if best_score < score:
+                best_move, best_score = move, score
+                if best_score >= beta: break
+        return best_move, best_score
