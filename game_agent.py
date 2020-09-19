@@ -223,7 +223,11 @@ class MinimaxPlayer(IsolationPlayer):
             return (-1, -1), self.score(game, game.active_player)
 
         second = lambda tup: tup[1]
-        return max(((move, -self.minimax(game.forecast_move(move), depth -1)[1]) for move in moves), key=second)
+        return max( # 4. Gib den bestmöglichen Zug zurück
+            ((move, # 3. Fasse das in einem Tupel aus Zug und Bewertung für den Zug zusammen
+            -self.minimax(game.forecast_move(move), depth -1)[1]) # 2. Rufe minmax rekursiv auf um Bewertung für den Zug herauszufinden.
+             for move in moves) # 1. Für jeden möglichen Zug
+            , key=second) # 5. Weil wir das größtmögliche Element in einer Liste aus Tupeln von Zug und Bewertung suchen, und man ja nicht den größtmöglichen Zug haben kann, geben wir mit der Funktion an, dass die größte Bewertung zur Suche nach dem größtmöglichen Element verwendet werden soll.
 
 class AlphaBetaPlayer(IsolationPlayer):
     """Game-playing agent that chooses a move using iterative deepening minimax
