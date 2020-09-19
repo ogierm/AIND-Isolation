@@ -317,7 +317,7 @@ class AlphaBetaPlayer(IsolationPlayer):
         if self.time_left() < self.TIMER_THRESHOLD:
             raise SearchTimeout()
 
-        maximum = (-1, -1), alpha
+        maximum = (-1, -1), alpha # Bestmöglicher Zug & bestmögliche Bewertung
 
         moves = game.get_legal_moves()
         if depth == 0 or len(moves) == 0:
