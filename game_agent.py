@@ -219,8 +219,8 @@ class MinimaxPlayer(IsolationPlayer):
             raise SearchTimeout()
 
         moves = game.get_legal_moves()
-        if depth == 0 or len(moves) == 0:
-            return (-1, -1), self.score(game, game.active_player)
+        if depth == 0 or len(moves) == 0: # Maximale Suchtiefe erreicht oder keine Züge mehr möglich (Spiel zuende)
+            return (-1, -1), self.score(game, game.active_player) # wichtig ist nur die Bewertung für den Zug.
 
         second = lambda tup: tup[1]
         return max( # 4. Gib den bestmöglichen Zug zurück
